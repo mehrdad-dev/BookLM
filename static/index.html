@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Recommender</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f4f6fb;
+            margin: 0;
+            padding: 0;
+        }
+        .tabs {
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            padding: 1em 2em 0.5em 2em;
+            display: flex;
+            gap: 1em;
+            border-bottom: 1px solid #e0e6ed;
+        }
+        .tabs button {
+            background: #e0e6ed;
+            border: none;
+            padding: 0.6em 1.5em;
+            border-radius: 20px 20px 0 0;
+            font-size: 1em;
+            color: #333;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .tabs button:hover, .tabs button.active {
+            background: #4f8cff;
+            color: #fff;
+        }
+        .tab {
+            display: none;
+            padding: 2em;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .tab.active {
+            display: block;
+        }
+        #recommend h2 {
+            color: #4f8cff;
+            margin-bottom: 1.5em;
+        }
+        #compare h2 {
+            color: #4f8cff;
+            margin-bottom: 1.5em;
+        }
+        #userQuery {
+            width: 60%;
+            padding: 0.7em 1em;
+            border: 1px solid #cfd8dc;
+            border-radius: 8px;
+            font-size: 1em;
+            margin-bottom: 1em;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        }
+        #recommend button {
+            background: #4f8cff;
+            color: #fff;
+            border: none;
+            padding: 0.7em 1.5em;
+            border-radius: 8px;
+            font-size: 1em;
+            margin-left: 1em;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        #recommend button:hover {
+            background: #2563eb;
+        }
+        #compare button {
+            background: #4f8cff;
+            color: #fff;
+            border: none;
+            padding: 0.7em 1.5em;
+            border-radius: 8px;
+            font-size: 1em;
+            margin-left: 1em;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        #compare button:hover {
+            background: #2563eb;
+        }
+        #compareQuery {
+            width: 60%;
+            padding: 0.7em 1em;
+            border: 1px solid #cfd8dc;
+            border-radius: 8px;
+            font-size: 1em;
+            margin-bottom: 1em;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        }
+        #compare-llm-result {
+            margin-top: 2em;
+        }
+        #results {
+            margin-top: 2em;
+        }
+        .book-result {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(79,140,255,0.07);
+            padding: 1.5em 2em 1.5em 1.5em;
+            margin-bottom: 2em;
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5em;
+            position: relative;
+        }
+        .book-cover {
+            max-width: 110px;
+            max-height: 160px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            object-fit: cover;
+            background: #e0e6ed;
+        }
+        .book-info {
+            flex: 1;
+        }
+        .book-result b {
+            color: #2563eb;
+            font-size: 1.1em;
+        }
+        .book-title {
+            font-size: 1.3em;
+            color: #222;
+            margin-bottom: 0.3em;
+            font-weight: bold;
+        }
+        .book-author {
+            color: #555;
+            margin-bottom: 0.5em;
+        }
+        .book-rating {
+            color: #f59e42;
+            font-weight: bold;
+            margin-bottom: 0.5em;
+        }
+        .book-genres {
+            color: #4f8cff;
+            margin-bottom: 0.7em;
+        }
+        .book-description {
+            color: #333;
+            margin-bottom: 0.5em;
+        }
+        .llm-recommendation {
+            background: linear-gradient(90deg, #e0e6ed 0%, #dbeafe 100%);
+            border: 2px solid #4f8cff;
+            border-radius: 18px;
+            box-shadow: 0 4px 16px rgba(79,140,255,0.13);
+            padding: 2em 2em 1.5em 2em;
+            margin-bottom: 2.5em;
+            text-align: left;
+            position: relative;
+        }
+        .llm-recommendation .llm-badge {
+            position: absolute;
+            top: -18px;
+            left: 20px;
+            background: #4f8cff;
+            color: #fff;
+            padding: 0.3em 1em;
+            border-radius: 12px;
+            font-size: 0.95em;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 8px rgba(79,140,255,0.13);
+        }
+        .llm-recommendation .llm-title {
+            font-size: 1.4em;
+            color: #1e293b;
+            font-weight: bold;
+            margin-bottom: 0.7em;
+        }
+        .llm-recommendation .llm-reasoning {
+            color: #222;
+            font-size: 1.1em;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #e0e6ed;
+            margin: 2em 0;
+        }
+        @media (max-width: 700px) {
+            .tab { padding: 1em; }
+            .book-result { flex-direction: column; align-items: stretch; }
+            .book-cover { margin: 0 auto 1em auto; display: block; }
+            .llm-recommendation { padding: 1.2em 1em 1em 1em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="tabs">
+        <button onclick="showTab('recommend')" class="active">Recommendation</button>
+        <button onclick="showTab('compare')">Compare</button>
+        <button onclick="showTab('about')">About</button>
+    </div>
+    <div id="recommend" class="tab active">
+        <h2>Book Recommendations</h2>
+        <input type="text" id="userQuery" placeholder="Enter your book preference...">
+        <button onclick="fetchRecommendations()">Get Recommendations</button>
+        <div id="results"></div>
+    </div>
+    <div id="about" class="tab">
+        <h2>About</h2>
+        <p>This is a book recommender demo.</p>
+    </div>
+    <div id="compare" class="tab">
+        <h2>Compare Books</h2>
+        <input type="text" id="compareQuery" placeholder="Search for a book by title...">
+        <button onclick="compareSearch()">Search</button>
+        <div id="compare-results"></div>
+        <div id="selected-books"></div>
+        <div id="compare-buttons" style="display:none; margin-top:1em;">
+            <button id="compare-btn" onclick="compareSelectedBooks()">Compare</button>
+            <button id="clear-btn" onclick="clearSelections()">Clear</button>
+        </div>
+        <div id="compare-llm-result"></div>
+    </div>
+    <script>
+        function showTab(tabId) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tabs button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            if(tabId === 'recommend') {
+                document.querySelector('.tabs button').classList.add('active');
+            } else if(tabId === 'about') {
+                document.querySelectorAll('.tabs button')[1].classList.add('active');
+            } else if(tabId === 'compare') {
+                document.querySelectorAll('.tabs button')[2].classList.add('active');
+            }
+        }
+        async function fetchRecommendations() {
+            const userQuery = document.getElementById('userQuery').value || "I want to read a book fantasy book which is about magical worlds.";
+            const res = await fetch(`/recommend?query=${encodeURIComponent(userQuery)}`);
+            const data = await res.json();
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+            // Show LLM personalized recommendation at the top
+            if (data.llm_result && data.llm_result.title && data.llm_result.reasoning) {
+                resultsDiv.innerHTML += `
+                <div class="llm-recommendation">
+                    <div class="llm-badge">Personalized Pick</div>
+                    <div class="llm-title">${data.llm_result.title}</div>
+                    <div class="llm-reasoning">${data.llm_result.reasoning}</div>
+                </div>
+                `;
+            }
+            // Show the rest of the recommendations
+            data.recommendations.forEach((book, idx) => {
+                resultsDiv.innerHTML += `
+                <div class="book-result">
+                    <img class="book-cover" src="${book.coverImg}" alt="Cover Image" onerror="this.style.display='none'">
+                    <div class="book-info">
+                        <div class="book-title">${idx+1}. ${book.title}</div>
+                        <div class="book-author"><b>Author:</b> ${book.author}</div>
+                        <div class="book-rating"><b>Rating:</b> ${book.rating}</div>
+                        <div class="book-genres"><b>Genres:</b> ${book.genres}</div>
+                        <div class="book-description"><b>Description:</b> ${book.description}</div>
+                    </div>
+                </div>
+                <hr>`;
+            });
+        }
+        let selectedBooks = [];
+        let selectedBookData = [];
+        let lastResults = [];
+        async function compareSearch() {
+            const query = document.getElementById('compareQuery').value;
+            if (!query) return;
+            const res = await fetch(`/compare?query1=${encodeURIComponent(query)}&query2=`);
+            const data = await res.json();
+            const results = data.results.results1.slice(0, 5);
+            lastResults = results;
+            const resultsDiv = document.getElementById('compare-results');
+            resultsDiv.innerHTML = '';
+            results.forEach((book, idx) => {
+                const disabled = selectedBooks.length >= 2 || selectedBooks.includes(book.title) ? 'disabled' : '';
+                resultsDiv.innerHTML += `
+                    <div class="book-result">
+                        <img class="book-cover" src="${book.coverImg}" alt="Cover Image" onerror="this.style.display='none'">
+                        <div class="book-info">
+                            <div class="book-title">${book.title}</div>
+                            <div class="book-author"><b>Author:</b> ${book.author}</div>
+                            <div class="book-rating"><b>Rating:</b> ${book.rating}</div>
+                            <div class="book-description"><b>Description:</b> ${book.description}</div>
+                            <button onclick="selectBook(${idx})" ${disabled}>Select</button>
+                        </div>
+                    </div>`;
+            });
+        }
+        function selectBook(idx) {
+            if (selectedBooks.length >= 2) return;
+            const book = lastResults[idx];
+            if (!selectedBooks.includes(book.title)) {
+                selectedBooks.push(book.title);
+                selectedBookData.push(book);
+            }
+            updateSelectedBooks();
+        }
+        function updateSelectedBooks() {
+            const selectedDiv = document.getElementById('selected-books');
+            selectedDiv.innerHTML = '<h3>Selected Books:</h3>' + selectedBookData.map((b, i) => `
+                <div class="book-result">
+                    <img class="book-cover" src="${b.coverImg}" alt="Cover Image" onerror="this.style.display='none'">
+                    <div class="book-info">
+                        <div class="book-title">${b.title}</div>
+                        <div class="book-author"><b>Author:</b> ${b.author}</div>
+                        <div class="book-rating"><b>Rating:</b> ${b.rating}</div>
+                        <div class="book-description"><b>Description:</b> ${b.description}</div>
+                    </div>
+                </div>`).join('');
+            // Show compare button only if two books are selected
+            document.getElementById('compare-buttons').style.display = (selectedBooks.length === 2) ? 'block' : 'none';
+        }
+        function clearSelections() {
+            selectedBooks = [];
+            selectedBookData = [];
+            document.getElementById('selected-books').innerHTML = '';
+            document.getElementById('compare-buttons').style.display = 'none';
+            document.getElementById('compare-llm-result').innerHTML = '';
+        }
+        async function compareSelectedBooks() {
+            if (selectedBookData.length !== 2) return;
+            const res = await fetch(`/compare?query1=${encodeURIComponent(selectedBookData[0].title)}&query2=${encodeURIComponent(selectedBookData[1].title)}`);
+            const data = await res.json();
+            const compareDiv = document.getElementById('compare-llm-result');
+            compareDiv.innerHTML = `<div class="llm-recommendation"><div class="llm-badge">LLM Comparison</div><div class="llm-reasoning">${data.comparison}</div></div>`;
+        }
+    </script>
+</body>
+</html>
