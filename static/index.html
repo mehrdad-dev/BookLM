@@ -49,6 +49,10 @@
             color: #4f8cff;
             margin-bottom: 1.5em;
         }
+        #about h2 {
+            color: #4f8cff;
+            margin-bottom: 1.5em;
+        }
         #userQuery {
             width: 60%;
             padding: 0.7em 1em;
@@ -210,7 +214,14 @@
     </div>
     <div id="about" class="tab">
         <h2>About</h2>
-        <p>This is a book recommender demo.</p>
+
+        <h3>BookLM - Intelligent Book Recommendation System</h3>
+        <p>
+        A sophisticated book recommendation system that combines the power of AI, vector similarity search, and natural language processing to provide personalized book recommendations.
+        </p>
+
+        <p>GitHub: </p>
+
     </div>
     <div id="compare" class="tab">
         <h2>Compare Books</h2>
@@ -231,9 +242,10 @@
             document.getElementById(tabId).classList.add('active');
             if(tabId === 'recommend') {
                 document.querySelector('.tabs button').classList.add('active');
-            } else if(tabId === 'about') {
-                document.querySelectorAll('.tabs button')[1].classList.add('active');
             } else if(tabId === 'compare') {
+                document.querySelectorAll('.tabs button')[1].classList.add('active');
+            }
+            else if(tabId === 'about') {
                 document.querySelectorAll('.tabs button')[2].classList.add('active');
             }
         }
