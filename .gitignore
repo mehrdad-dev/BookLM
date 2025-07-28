@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Vector database index
+chroma_books_index/
+
+.env
