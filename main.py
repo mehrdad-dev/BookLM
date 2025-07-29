@@ -337,7 +337,7 @@ def compare(query1: str, query2: str = ""):
         book2_info = str(results2["results"][0]["title"]) + "\n" + str(results2["results"][0]["description"]) + "\n" + str(results2["results"][0]["rating"]) + "\n" + str(results2["results"][0]["author"])
         
         compare_prompt = ChatPromptTemplate.from_messages([
-            ("system", "You are a helpful assistant that compares two books for a user. Given the details of two books, provide a friendly, engaging, and insightful comparison. Mention strengths, weaknesses, and which type of reader might prefer each. Output should be a paragraph, not a table."),
+            ("system", "You are a helpful assistant that compares two books for a user. Given the details of two books, provide a friendly, engaging, and insightful comparison. Mention strengths, weaknesses, and which type of reader might prefer each. Output should be a paragraph, not a table. You must speak directly to the user."),
             ("human", "Book 1: {book1_info}\nBook 2: {book2_info}")
         ])
         
