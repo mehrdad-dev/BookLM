@@ -11,7 +11,7 @@ A sophisticated book recommendation system that combines the power of AI, vector
 - **Fast API**: Built with FastAPI for high-performance API endpoints
 - **Vector Database**: ChromaDB for efficient similarity search and retrieval
 
-![BookLM](https://github.com/user-attachments/assets/2eee9ab6-c1ff-4feb-859d-e4e60e86821e)
+https://github.com/user-attachments/assets/db395501-37e1-421c-952d-6c5ecf913e4a
 
 ## 🏗️ Architecture
 
