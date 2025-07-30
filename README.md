@@ -16,7 +16,7 @@ https://github.com/user-attachments/assets/db395501-37e1-421c-952d-6c5ecf913e4a
 
 The system consists of several key components:
 
-1. **Data Layer**: SQLite database storing book metadata
+1. **Data Layer**: SQLite database storing dataset
 2. **Vector Database**: ChromaDB for semantic similarity search
 3. **AI Layer**: OpenAI LLM for intelligent recommendations
 4. **API Layer**: FastAPI serving REST endpoints
