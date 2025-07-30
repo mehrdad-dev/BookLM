@@ -7,7 +7,6 @@ A sophisticated book recommendation system that combines the power of AI, vector
 - **AI-Powered Recommendations**: Uses OpenAI's language models to provide intelligent, contextual book recommendations
 - **Semantic Search**: Leverages HuggingFace embeddings and ChromaDB for similarity-based book discovery
 - **Book Comparison**: Compare two books with AI-generated insights
-- **Modern Web Interface**: Clean, responsive web UI for easy interaction
 - **Fast API**: Built with FastAPI for high-performance API endpoints
 - **Vector Database**: ChromaDB for efficient similarity search and retrieval
 
