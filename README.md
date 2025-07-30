@@ -41,7 +41,7 @@ Tools Used:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/mehrdad-dev/BookLM
+git clone https://github.com/mehrdad-dev/BookLM.git
 cd BookLM
 ```
 
